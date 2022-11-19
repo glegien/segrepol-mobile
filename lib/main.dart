@@ -110,7 +110,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 future: _initFuture,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.done) {
-                    return Text(Init.userIdd!);
+                    return Text(Init.deviceId!);
                   } else {
                     return const Text("LOADING...");
                   }
