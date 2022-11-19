@@ -5,40 +5,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:appinio_swiper/appinio_swiper.dart';
 import 'package:segrepol/chat.dart';
-import 'package:segrepol/menu.dart';
 import 'package:http/http.dart' as http;
 
 import 'init.dart';
-import 'dart:ui';
 
 import 'model.dart';
 
 void main() async {
   runApp(const MyApp());
 }
-
-List<Card> cards = [
-  Card(
-    child: Column(
-      children: [
-        const Image(
-          image: NetworkImage(
-              'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg'),
-        ),
-        SizedBox(
-            //width: screenSize.width / 1.2,
-            //height: screenSize.height / 1.7 - screenSize.height / 2.2,
-            child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            Text("Stara sowa"),
-            Text("Oddam starą sową za darmo. Czasem lata..."),
-          ],
-        ))
-      ],
-    ),
-  ),
-];
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -51,7 +26,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => const MyHomePage(
-              title: 'AAAA',
+              title: 'Hubka',
             ),
         '/chat': (context) => ChatPage(),
       },
@@ -96,7 +71,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   final Future _initFuture = Init.initialize();
-  final Future _fetchTrasches = initialize();
+  final Future _fetchTrashes = initialize();
 
   static List<Trash>? trashList;
 
@@ -107,7 +82,6 @@ class _MyHomePageState extends State<MyHomePage> {
   static fetchTrashes() async {
     final response = await http.get(Uri.parse(
         'https://europe-central2-segrepol-b80d8.cloudfunctions.net/getOthersItems?userId=dupa'));
-
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
       // then parse the JSON.
@@ -120,7 +94,7 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-  List<Card> fetchTrashes2() {
+  List<Card> buildCards() {
     List<Card> list = List.empty(growable: true);
     for (Trash el in trashList!) {
       list.add(el.buildCard());
@@ -176,21 +150,17 @@ class _MyHomePageState extends State<MyHomePage> {
             SizedBox(
                 height: MediaQuery.of(context).size.height * 0.75,
                 child: FutureBuilder(
-                    future: _fetchTrasches,
+                    future: _fetchTrashes,
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.done) {
                         return AppinioSwiper(
-                          cards: fetchTrashes2(),
+                          cards: buildCards(),
                           onSwipe: _swipe,
                         );
                       } else {
                         return const Text("LOADING...");
                       }
                     })
-                // child: AppinioSwiper(
-                //       cards: fetchTrashes2(),
-                //       onSwipe: _swipe,
-                //     ),
                 ),
             SizedBox(child: Row() // lower menu
                 )
