@@ -7,7 +7,7 @@ class Init {
     await _configureUserId();
   }
 
-  static String? userIdd;
+  static String? deviceId;
 
   static _configureUserId() async {
     final prefs = await SharedPreferences.getInstance();
@@ -18,6 +18,6 @@ class Init {
     } else {
       userId = prefs.getString("userId");
     }
-    userIdd = userId;
+    deviceId = userId;
   }
 }

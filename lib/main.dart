@@ -1,31 +1,56 @@
+import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:appinio_swiper/appinio_swiper.dart';
+import 'package:segrepol/chat.dart';
+import 'package:segrepol/menu.dart';
+import 'package:http/http.dart' as http;
 
 import 'init.dart';
+import 'dart:ui';
+
+import 'model.dart';
 
 void main() async {
   runApp(const MyApp());
 }
 
-List<Container> cards = [
-  Container(
-    alignment: Alignment.center,
-    child: const Text('1'),
-    color: CupertinoColors.activeBlue,
-  ),
-  Container(
-    alignment: Alignment.center,
-    child: const Text('2'),
-    color: CupertinoColors.activeGreen,
-  ),
-  Container(
-    alignment: Alignment.center,
-    child: const Text('3'),
-    color: CupertinoColors.activeOrange,
-  )
-];
+//List<Container>? cards = fetchTrashes2(await fetchTrashes());
+// [
+//   Container(
+//       child: Card(
+//     child: Column(
+//       children: [
+//         const Image(
+//           image: NetworkImage(
+//               'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg'),
+//         ),
+//         SizedBox(
+//             //width: screenSize.width / 1.2,
+//             //height: screenSize.height / 1.7 - screenSize.height / 2.2,
+//             child: Column(
+//           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+//           children: <Widget>[
+//             Text(
+//               "Stara sowa"
+//             ),
+//             Text(
+//               "Oddam starą sową za darmo. Czasem lata..."
+//             ),
+//           ],
+//         ))
+//       ],
+//     ),
+//   )),
+//   Trash(0,
+//       "Śmieć 22", "Nie chce tego w domu!!!",
+//       'https://images.ctfassets.net/23aumh6u8s0i/4JKsesGb6RuQLsjVnUmB0j/0bcbb36344547e9ab698b9077f80170a/16_brightness').buildCard(),
+//   Trash(1,
+//       "Śmieć 23", "Śmieć śmieć śmieć",
+//       'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg').buildCard()
+// ];
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -35,6 +60,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Swipe Demo',
+      initialRoute: '/',
+      routes: {
+        '/': (context) => const MyHomePage(
+              title: 'AAAA',
+            ),
+        '/chat': (context) => ChatPage(),
+      },
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -47,7 +79,6 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }
@@ -70,26 +101,49 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+Future<List<Trash>> fetchTrashes() async {
+  final response = await http.get(Uri.parse(
+      'https://us-central1-segrepol-b80d8.cloudfunctions.net/getOthersItems'));
 
+  if (response.statusCode == 200) {
+    // If the server did return a 200 OK response,
+    // then parse the JSON.
+    Map<String, dynamic> json = jsonDecode(response.body);
+    List<Trash> result = Trash.fromJson(json);
+    return result;
+  } else {
+    // If the server did not return a 200 OK response,
+    // then throw an exception.
+    throw Exception('Failed to load album');
+  }
+}
+
+List<Card> fetchTrashes2() {
+  var trashes = fetchTrashes();
+  List<Card> list = List.empty();
+  trashes
+      .then((value) => () {
+            for (Trash el in value) {
+              list.add(el.buildCard());
+            }
+            log(list.toString());
+            return list;
+          })
+      .catchError((error) => () {
+          list.add(Card());
+            return list;
+          });
+  return list;
+}
+
+class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
   }
 
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
-
   final Future _initFuture = Init.initialize();
+  //final Future _fetchTrasches = fetchTrashes2();
 
   @override
   Widget build(BuildContext context) {
@@ -101,8 +155,8 @@ class _MyHomePageState extends State<MyHomePage> {
     // than having to individually change instances of widgets.
     return Scaffold(
       appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
+          // Here we take the value from the MyHomePage object that was created by
+          // the App.build method, and use it to set our appbar title.
           title: Text(widget.title),
           leading: CircleAvatar(
             backgroundColor: Colors.brown.shade800,
@@ -110,7 +164,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 future: _initFuture,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.done) {
-                    return Text(Init.userIdd!);
+                    return Text(Init.deviceId!);
                   } else {
                     return const Text("LOADING...");
                   }
@@ -136,27 +190,28 @@ class _MyHomePageState extends State<MyHomePage> {
           // horizontal).
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.75,
               child: AppinioSwiper(
-                cards: cards,
+                cards: fetchTrashes2(),
+                onSwipe: _swipe,
               ),
             ),
+            SizedBox(child: Row() // lower menu
+                )
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
+  }
+
+  void _swipe(int index, AppinioSwiperDirection direction) {
+    log("the card was swiped to the: " + direction.name);
+    if (direction == AppinioSwiperDirection.right) {
+      // Open the chat
+      Navigator.pushNamed(context, '/chat');
+    } else {
+      // Nothing, just go to the next
+    }
   }
 }
