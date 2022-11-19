@@ -17,6 +17,7 @@ class OverlayMenu extends StatelessWidget {
   }
 
   onPressed2() {
+
     log("dupa123");
   }
 
@@ -29,24 +30,24 @@ class OverlayMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(right: MediaQuery.of(context).size.width / 4),
-      child: FloatingActionRow(children: [
+      padding: EdgeInsets.only(right: MediaQuery.of(context).size.width / 10),
+      child: FloatingActionRow(height: 100, children: [
         FloatingActionRowButton(
             color: Colors.white,
             foregroundColor: Colors.black,
-            icon: Icon(Icons.abc),
+            icon: Icon(size: 40, Icons.shopping_basket),
             onTap: () => onPressed(context)),
         FloatingActionRowDivider(),
         FloatingActionRowButton(
             color: Colors.white,
             foregroundColor: Colors.black,
-            icon: Icon(Icons.confirmation_num_sharp),
+            icon: Icon(size: 40, Icons.question_answer),
             onTap: () => onPressed2()),
         FloatingActionRowDivider(),
         FloatingActionRowButton(
             color: Colors.white,
             foregroundColor: Colors.black,
-            icon: Icon(Icons.confirmation_num_sharp),
+            icon: Icon(size: 40, Icons.add_circle_outline),
             onTap: () => onPressed3(context)),
       ]),
     );

@@ -1,7 +1,10 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:http/http.dart' as http;
+import 'package:segrepol/init.dart';
 import 'package:segrepol/menu_overlay.dart';
 
 class AddDescription extends StatefulWidget {
@@ -14,6 +17,9 @@ class AddDescription extends StatefulWidget {
 }
 
 class _MyDescriptionAdapter extends State<AddDescription> {
+  final titleController = TextEditingController();
+  final descriptionController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,16 +42,18 @@ class _MyDescriptionAdapter extends State<AddDescription> {
                       ),
                       Expanded(
                         child: Column(
-                          children: const [
+                          children: [
                             SizedBox(
                               height: 200,
                               child: TextField(
+                                  controller: titleController,
                                   decoration:
                                       InputDecoration(labelText: "Add Title")),
                             ),
-                            const Padding(
+                            Padding(
                               padding: EdgeInsets.all(8.0),
                               child: TextField(
+                                  controller: descriptionController,
                                   decoration: InputDecoration(
                                       labelText: "Description")),
                             ),
@@ -61,7 +69,7 @@ class _MyDescriptionAdapter extends State<AddDescription> {
                       foregroundColor: Colors.green[200],
                       textStyle: const TextStyle(fontSize: 30)),
                   child: const Text("Share"),
-                  onPressed: () => sendImage(),
+                  onPressed: () => sendImage(widget.imageString),
                 ),
               ),
             ],
@@ -69,7 +77,20 @@ class _MyDescriptionAdapter extends State<AddDescription> {
         ));
   }
 
-  sendImage() {}
+  sendImage(String imageString) async {
+    await http.post(
+        Uri.parse(
+            'https://europe-central2-segrepol-b80d8.cloudfunctions.net/uploadItem'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, String>{
+          "name": titleController.text.toString(),
+          "description": descriptionController.text.toString(),
+          "userId": Init.deviceId!,
+          "image": base64Encode(File(imageString).readAsBytesSync())
+        }));
+  }
 
   getImage(String imageString) {
     return Image.file(File(imageString),
