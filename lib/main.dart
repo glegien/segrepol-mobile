@@ -17,9 +17,8 @@ void main() async {
   runApp(const MyApp());
 }
 
-List<Card> cards =
-[
- Card(
+List<Card> cards = [
+  Card(
     child: Column(
       children: [
         const Image(
@@ -32,12 +31,8 @@ List<Card> cards =
             child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            Text(
-              "Stara sowa"
-            ),
-            Text(
-              "Oddam starą sową za darmo. Czasem lata..."
-            ),
+            Text("Stara sowa"),
+            Text("Oddam starą sową za darmo. Czasem lata..."),
           ],
         ))
       ],
@@ -94,23 +89,6 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
-Future<List<Trash>> fetchTrashes() async {
-  final response = await http.get(Uri.parse(
-      'https://europe-central2-segrepol-b80d8.cloudfunctions.net/getOthersItems?userId=dupa'));
-
-  if (response.statusCode == 200) {
-    // If the server did return a 200 OK response,
-    // then parse the JSON.
-    Map<String, dynamic> json = jsonDecode(response.body);
-    List<Trash> result = Trash.fromJson(json);
-    return result;
-  } else {
-    // If the server did not return a 200 OK response,
-    // then throw an exception.
-    throw Exception('Failed to load album');
-  }
-}
-
 class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
@@ -118,23 +96,36 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   final Future _initFuture = Init.initialize();
-  final Future _fetchTrasches = fetchTrashes();
+  final Future _fetchTrasches = initialize();
+
+  static List<Trash>? trashList;
+
+  static Future initialize() async {
+    await fetchTrashes();
+  }
+
+  static fetchTrashes() async {
+    final response = await http.get(Uri.parse(
+        'https://europe-central2-segrepol-b80d8.cloudfunctions.net/getOthersItems?userId=dupa'));
+
+    if (response.statusCode == 200) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON.
+      Map<String, dynamic> json = jsonDecode(response.body);
+      trashList = Trash.fromJson(json);
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception('Failed to load TRASHES!!!');
+    }
+  }
 
   List<Card> fetchTrashes2() {
-    List<Card> list = List.empty();
-    _fetchTrasches
-        .then((value) => () {
-      for (Trash el in value) {
-        list.add(el.buildCard());
-      }
-      log(list.toString());
-      return list;
-    })
-        .catchError((error) => () {
-      list.add(Card());
-      return list;
-    });
-    return cards;
+    List<Card> list = List.empty(growable: true);
+    for (Trash el in trashList!) {
+      list.add(el.buildCard());
+    }
+    return list;
   }
 
   @override
@@ -183,24 +174,24 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             SizedBox(
-              height: MediaQuery.of(context).size.height * 0.75,
-              child: FutureBuilder(
-                  future: _fetchTrasches,
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.done) {
-                      return AppinioSwiper(
-                                cards: fetchTrashes2(),
-                                onSwipe: _swipe,
-                              );
-                    } else {
-                      return const Text("LOADING...");
-                    }
-                  })
-          // child: AppinioSwiper(
-          //       cards: fetchTrashes2(),
-          //       onSwipe: _swipe,
-          //     ),
-            ),
+                height: MediaQuery.of(context).size.height * 0.75,
+                child: FutureBuilder(
+                    future: _fetchTrasches,
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.done) {
+                        return AppinioSwiper(
+                          cards: fetchTrashes2(),
+                          onSwipe: _swipe,
+                        );
+                      } else {
+                        return const Text("LOADING...");
+                      }
+                    })
+                // child: AppinioSwiper(
+                //       cards: fetchTrashes2(),
+                //       onSwipe: _swipe,
+                //     ),
+                ),
             SizedBox(child: Row() // lower menu
                 )
           ],
