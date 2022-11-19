@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_storage_path/flutter_storage_path.dart';
 import 'package:segrepol/FileModel.dart';
 import 'package:segrepol/add_description_view.dart';
+import 'package:segrepol/menu_overlay.dart';
 
 class ImageAdder extends StatefulWidget {
   const ImageAdder({super.key});
@@ -37,7 +38,21 @@ class _MyImageAdder extends State<ImageAdder> {
 
   @override
   Widget build(BuildContext context) {
+    // OverlayState? overlayState = Overlay.of(context);
+    // OverlayEntry overlayEntry = OverlayEntry(
+    //   builder: (context) => Positioned(
+    //       child: Padding(
+    //         padding: const EdgeInsets.all(55.0),
+    //         child: Padding(
+    //           padding: const EdgeInsets.all(55.0),
+    //           child: Text("asd"),
+    //         ),
+    //       )),
+    // );
+    // overlayState!.insert(overlayEntry);
+
     return Scaffold(
+      floatingActionButton: OverlayMenu(),
       body: SafeArea(
         child: Column(
           children: <Widget>[
@@ -125,7 +140,7 @@ class _MyImageAdder extends State<ImageAdder> {
 
   doSmth() {
     Navigator.of(context).push(MaterialPageRoute(
-      builder: (context) =>  AddDescription(image!),
+      builder: (context) => AddDescription(image!),
     ));
 
     // Navigator.push(

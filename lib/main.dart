@@ -1,16 +1,14 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:appinio_swiper/appinio_swiper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:appinio_swiper/appinio_swiper.dart';
-import 'package:segrepol/chat.dart';
-import 'package:segrepol/menu.dart';
 import 'package:http/http.dart' as http;
+import 'package:segrepol/chat.dart';
+import 'package:segrepol/menu_overlay.dart';
 
 import 'init.dart';
-import 'dart:ui';
-
 import 'model.dart';
 
 void main() async {
@@ -103,7 +101,7 @@ class MyHomePage extends StatefulWidget {
 
 Future<List<Trash>> fetchTrashes() async {
   final response = await http.get(Uri.parse(
-      'https://us-central1-segrepol-b80d8.cloudfunctions.net/getOthersItems'));
+      'https://europe-central2-segrepol-b80d8.cloudfunctions.net/getOthersItems?userId=dupa'));
 
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,
@@ -130,7 +128,7 @@ List<Card> fetchTrashes2() {
             return list;
           })
       .catchError((error) => () {
-          list.add(Card());
+            list.add(Card());
             return list;
           });
   return list;
@@ -143,6 +141,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   final Future _initFuture = Init.initialize();
+
   //final Future _fetchTrasches = fetchTrashes2();
 
   @override
@@ -154,6 +153,7 @@ class _MyHomePageState extends State<MyHomePage> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     return Scaffold(
+      floatingActionButton: OverlayMenu(),
       appBar: AppBar(
           // Here we take the value from the MyHomePage object that was created by
           // the App.build method, and use it to set our appbar title.
