@@ -1,14 +1,18 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:appinio_swiper/appinio_swiper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
 import 'package:appinio_swiper/appinio_swiper.dart';
 import 'package:segrepol/chat.dart';
+
 import 'package:http/http.dart' as http;
+import 'package:segrepol/chat.dart';
+import 'package:segrepol/menu_overlay.dart';
 
 import 'init.dart';
-
 import 'model.dart';
 
 void main() async {
@@ -111,6 +115,7 @@ class _MyHomePageState extends State<MyHomePage> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     return Scaffold(
+      floatingActionButton: OverlayMenu(),
       appBar: AppBar(
           // Here we take the value from the MyHomePage object that was created by
           // the App.build method, and use it to set our appbar title.
