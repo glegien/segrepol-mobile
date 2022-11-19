@@ -2,7 +2,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:appinio_swiper/appinio_swiper.dart';
-import 'package:segrepol/add_image.dart';
 
 import 'init.dart';
 
@@ -48,7 +47,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const ImageAdder(),
+      home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }

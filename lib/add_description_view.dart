@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -17,16 +19,40 @@ class _MyDescriptionAdapter extends State<AddDescription> {
         body: Center(
       child: Column(
         children: [
-          const Padding(
-            padding: EdgeInsets.all(8.0),
-            child:
-                TextField(decoration: InputDecoration(labelText: "Add Title")),
-          ),
-          const Padding(
-            padding: EdgeInsets.all(8.0),
-            child: TextField(
-                decoration: InputDecoration(labelText: "Description")),
-          ),
+          Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: 200,
+                          child:
+                           getImage(widget.imageString)),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    child: Column(
+                      children: const [
+                        SizedBox(
+                          height: 200,
+                          child: TextField(
+                              decoration:
+                                  InputDecoration(labelText: "Add Title")),
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: TextField(
+                              decoration: InputDecoration(labelText: "Description")),
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              )),
+
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextButton(
@@ -43,4 +69,11 @@ class _MyDescriptionAdapter extends State<AddDescription> {
   }
 
   sendImage() {}
+
+  getImage(String imageString) {
+   return Image.file(File(imageString),
+        height: MediaQuery.of(context).size.height * 0.45,
+        width: MediaQuery.of(context).size.width);
+
+  }
 }
