@@ -103,7 +103,7 @@ class MyHomePage extends StatefulWidget {
 
 Future<List<Trash>> fetchTrashes() async {
   final response = await http.get(Uri.parse(
-      'https://us-central1-segrepol-b80d8.cloudfunctions.net/getOthersItems'));
+      'https://europe-central2-segrepol-b80d8.cloudfunctions.net/getOthersItems?userId=dupa'));
 
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,
