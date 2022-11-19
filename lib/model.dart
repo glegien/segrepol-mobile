@@ -1,23 +1,25 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class Trash {
-  int _id;
+  String id;
   String name;
   String description;
-  String path;
+  String userId;
+  String imageStr;
 
-  Trash(this._id, this.name, this.description, this.path);
+  Trash(this.id, this.name, this.description, this.userId, this.imageStr);
 
   Card buildCard() {
-    return  Card(
+    return Card(
       child: Column(
         children: [
-          Image(
-            image: NetworkImage(path),
-          ),
+          //Image(image: Image.memory(base64Decode(imageStr)).image),
+      Image(image:NetworkImage(
+              'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg')),
           SizedBox(
               //width: screenSize.width / 1.2,
               //height: screenSize.height / 1.7 - screenSize.height / 2.2,
@@ -34,10 +36,10 @@ class Trash {
   }
 
   static List<Trash> fromJson(Map<String, dynamic> json) {
-    List<Trash> result = List.empty();
-    for(var el in json.entries) {
+    List<Trash> result = List.empty(growable:true);
+    for (var el in json['result']) {
       log(el.toString());
-      result.add(Trash(el.value['userId'], el.value['name'], 'description', 'path'));
+      result.add(Trash(el['id'], el['name'], el['description'], el['userId'], el['image']));
     }
     return result;
   }

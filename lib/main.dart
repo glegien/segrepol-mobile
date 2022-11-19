@@ -4,6 +4,10 @@ import 'dart:developer';
 import 'package:appinio_swiper/appinio_swiper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
+import 'package:appinio_swiper/appinio_swiper.dart';
+import 'package:segrepol/chat.dart';
+
 import 'package:http/http.dart' as http;
 import 'package:segrepol/chat.dart';
 import 'package:segrepol/menu_overlay.dart';
@@ -14,41 +18,6 @@ import 'model.dart';
 void main() async {
   runApp(const MyApp());
 }
-
-//List<Container>? cards = fetchTrashes2(await fetchTrashes());
-// [
-//   Container(
-//       child: Card(
-//     child: Column(
-//       children: [
-//         const Image(
-//           image: NetworkImage(
-//               'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg'),
-//         ),
-//         SizedBox(
-//             //width: screenSize.width / 1.2,
-//             //height: screenSize.height / 1.7 - screenSize.height / 2.2,
-//             child: Column(
-//           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//           children: <Widget>[
-//             Text(
-//               "Stara sowa"
-//             ),
-//             Text(
-//               "Oddam starą sową za darmo. Czasem lata..."
-//             ),
-//           ],
-//         ))
-//       ],
-//     ),
-//   )),
-//   Trash(0,
-//       "Śmieć 22", "Nie chce tego w domu!!!",
-//       'https://images.ctfassets.net/23aumh6u8s0i/4JKsesGb6RuQLsjVnUmB0j/0bcbb36344547e9ab698b9077f80170a/16_brightness').buildCard(),
-//   Trash(1,
-//       "Śmieć 23", "Śmieć śmieć śmieć",
-//       'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg').buildCard()
-// ];
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -61,7 +30,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => const MyHomePage(
-              title: 'AAAA',
+              title: 'Hubka',
             ),
         '/chat': (context) => ChatPage(),
       },
@@ -99,41 +68,6 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
-Future<List<Trash>> fetchTrashes() async {
-  final response = await http.get(Uri.parse(
-      'https://europe-central2-segrepol-b80d8.cloudfunctions.net/getOthersItems?userId=dupa'));
-
-  if (response.statusCode == 200) {
-    // If the server did return a 200 OK response,
-    // then parse the JSON.
-    Map<String, dynamic> json = jsonDecode(response.body);
-    List<Trash> result = Trash.fromJson(json);
-    return result;
-  } else {
-    // If the server did not return a 200 OK response,
-    // then throw an exception.
-    throw Exception('Failed to load album');
-  }
-}
-
-List<Card> fetchTrashes2() {
-  var trashes = fetchTrashes();
-  List<Card> list = List.empty();
-  trashes
-      .then((value) => () {
-            for (Trash el in value) {
-              list.add(el.buildCard());
-            }
-            log(list.toString());
-            return list;
-          })
-      .catchError((error) => () {
-            list.add(Card());
-            return list;
-          });
-  return list;
-}
-
 class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
@@ -141,8 +75,36 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   final Future _initFuture = Init.initialize();
+  final Future _fetchTrashes = initialize();
 
-  //final Future _fetchTrasches = fetchTrashes2();
+  static List<Trash>? trashList;
+
+  static Future initialize() async {
+    await fetchTrashes();
+  }
+
+  static fetchTrashes() async {
+    final response = await http.get(Uri.parse(
+        'https://europe-central2-segrepol-b80d8.cloudfunctions.net/getOthersItems?userId=dupa'));
+    if (response.statusCode == 200) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON.
+      Map<String, dynamic> json = jsonDecode(response.body);
+      trashList = Trash.fromJson(json);
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception('Failed to load TRASHES!!!');
+    }
+  }
+
+  List<Card> buildCards() {
+    List<Card> list = List.empty(growable: true);
+    for (Trash el in trashList!) {
+      list.add(el.buildCard());
+    }
+    return list;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -191,12 +153,20 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             SizedBox(
-              height: MediaQuery.of(context).size.height * 0.75,
-              child: AppinioSwiper(
-                cards: fetchTrashes2(),
-                onSwipe: _swipe,
-              ),
-            ),
+                height: MediaQuery.of(context).size.height * 0.75,
+                child: FutureBuilder(
+                    future: _fetchTrashes,
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.done) {
+                        return AppinioSwiper(
+                          cards: buildCards(),
+                          onSwipe: _swipe,
+                        );
+                      } else {
+                        return const Text("LOADING...");
+                      }
+                    })
+                ),
             SizedBox(child: Row() // lower menu
                 )
           ],
