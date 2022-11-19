@@ -1,30 +1,50 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:appinio_swiper/appinio_swiper.dart';
 
 import 'init.dart';
+import 'dart:ui';
+
+import 'model.dart';
 
 void main() async {
   runApp(const MyApp());
 }
 
+var screenSize = window.physicalSize;
+
 List<Container> cards = [
   Container(
-    alignment: Alignment.center,
-    child: const Text('1'),
-    color: CupertinoColors.activeBlue,
-  ),
-  Container(
-    alignment: Alignment.center,
-    child: const Text('2'),
-    color: CupertinoColors.activeGreen,
-  ),
-  Container(
-    alignment: Alignment.center,
-    child: const Text('3'),
-    color: CupertinoColors.activeOrange,
-  )
+      child: Card(
+    child: Column(
+      children: [
+        const Image(
+          image: NetworkImage(
+              'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg'),
+        ),
+        SizedBox(
+            //width: screenSize.width / 1.2,
+            //height: screenSize.height / 1.7 - screenSize.height / 2.2,
+            child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            Text(
+              "Stara sowa"
+            ),
+            Text(
+              "Oddam starą sową za darmo. Czasem lata..."
+            ),
+          ],
+        ))
+      ],
+    ),
+  )),
+  Trash(0,
+      "Śmieć 22", "Nie chce tego w domu!!!",
+      'https://images.ctfassets.net/23aumh6u8s0i/4JKsesGb6RuQLsjVnUmB0j/0bcbb36344547e9ab698b9077f80170a/16_brightness').buildCard(),
+  Trash(1,
+      "Śmieć 23", "Śmieć śmieć śmieć",
+      'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg').buildCard()
 ];
 
 class MyApp extends StatelessWidget {
@@ -101,8 +121,8 @@ class _MyHomePageState extends State<MyHomePage> {
     // than having to individually change instances of widgets.
     return Scaffold(
       appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
+          // Here we take the value from the MyHomePage object that was created by
+          // the App.build method, and use it to set our appbar title.
           title: Text(widget.title),
           leading: CircleAvatar(
             backgroundColor: Colors.brown.shade800,
@@ -136,13 +156,6 @@ class _MyHomePageState extends State<MyHomePage> {
           // horizontal).
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.75,
               child: AppinioSwiper(
@@ -152,11 +165,6 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
