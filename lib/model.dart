@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -9,9 +11,8 @@ class Trash {
 
   Trash(this._id, this.name, this.description, this.path);
 
-  Container buildCard() {
-    return Container(
-        child: Card(
+  Card buildCard() {
+    return  Card(
       child: Column(
         children: [
           Image(
@@ -29,6 +30,15 @@ class Trash {
           ))
         ],
       ),
-    ));
+    );
+  }
+
+  static List<Trash> fromJson(Map<String, dynamic> json) {
+    List<Trash> result = List.empty();
+    for(var el in json.entries) {
+      log(el.toString());
+      result.add(Trash(el.value['userId'], el.value['name'], 'description', 'path'));
+    }
+    return result;
   }
 }
