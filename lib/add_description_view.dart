@@ -1,10 +1,12 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:segrepol/init.dart';
+import 'package:segrepol/main.dart';
 import 'package:segrepol/menu_overlay.dart';
 
 class AddDescription extends StatefulWidget {
@@ -78,7 +80,7 @@ class _MyDescriptionAdapter extends State<AddDescription> {
   }
 
   sendImage(String imageString) async {
-    await http.post(
+    var response = await http.post(
         Uri.parse(
             'https://europe-central2-segrepol-b80d8.cloudfunctions.net/uploadItem'),
         headers: <String, String>{
@@ -90,6 +92,10 @@ class _MyDescriptionAdapter extends State<AddDescription> {
           "userId": Init.deviceId!,
           "image": base64Encode(File(imageString).readAsBytesSync())
         }));
+    log("obrazek has been added: ${response.statusCode}");
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) => MyHomePage(title: "title"),
+    ));
   }
 
   getImage(String imageString) {

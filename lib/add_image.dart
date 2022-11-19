@@ -29,28 +29,16 @@ class _MyImageAdder extends State<ImageAdder> {
     var imagePath = await StoragePath.imagesPath;
     var images = jsonDecode(imagePath!) as List;
     files = images.map<FileModel>((e) => FileModel.fromJson(e)).toList();
-    if (files != null && files!.isNotEmpty)
+    if (files != null && files!.isNotEmpty) {
       setState(() {
         selectedModel = files![0];
-        image = files![0].files![0];
+        image = files![0].files[0];
       });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    // OverlayState? overlayState = Overlay.of(context);
-    // OverlayEntry overlayEntry = OverlayEntry(
-    //   builder: (context) => Positioned(
-    //       child: Padding(
-    //         padding: const EdgeInsets.all(55.0),
-    //         child: Padding(
-    //           padding: const EdgeInsets.all(55.0),
-    //           child: Text("asd"),
-    //         ),
-    //       )),
-    // );
-    // overlayState!.insert(overlayEntry);
-
     return Scaffold(
       floatingActionButton: OverlayMenu(),
       body: SafeArea(
@@ -62,18 +50,6 @@ class _MyImageAdder extends State<ImageAdder> {
                 Row(
                   children: <Widget>[
                     SizedBox(width: 10),
-                    // DropdownButtonHideUnderline(
-                    //     child: DropdownButton<FileModel>(
-                    //   items: getItems(),
-                    //   onChanged: (FileModel? d) {
-                    //     assert(d!.files.isNotEmpty);
-                    //     image = d?.files[0];
-                    //     setState(() {
-                    //       selectedModel = d;
-                    //     });
-                    //   },
-                    //   value: selectedModel,
-                    // ))
                   ],
                 ),
                 Padding(
@@ -95,8 +71,13 @@ class _MyImageAdder extends State<ImageAdder> {
                         width: MediaQuery.of(context).size.width)
                     : Container()),
             Divider(),
-            selectedModel == null && selectedModel!.files.length < 1
-                ? Container()
+            selectedModel == null || selectedModel!.files.length < 1
+                ? Container(
+                    child: Text(
+                      "NIE MA ZDJEC W GALERII Grzesiu",
+                      style: TextStyle(fontSize: 30),
+                    ),
+                  )
                 : Container(
                     height: MediaQuery.of(context).size.height * 0.33,
                     child: GridView.builder(
@@ -139,6 +120,9 @@ class _MyImageAdder extends State<ImageAdder> {
   }
 
   doSmth() {
+    if (image == null) {
+      return;
+    }
     Navigator.of(context).push(MaterialPageRoute(
       builder: (context) => AddDescription(image!),
     ));
