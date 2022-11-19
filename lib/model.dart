@@ -5,7 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class Trash {
-  int id;
+  String id;
   String name;
   String description;
   String userId;
@@ -17,7 +17,9 @@ class Trash {
     return Card(
       child: Column(
         children: [
-          Image(image: Image.memory(base64Decode(imageStr)).image),
+          //Image(image: Image.memory(base64Decode(imageStr)).image),
+      Image(image:NetworkImage(
+              'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg')),
           SizedBox(
               //width: screenSize.width / 1.2,
               //height: screenSize.height / 1.7 - screenSize.height / 2.2,
@@ -34,7 +36,7 @@ class Trash {
   }
 
   static List<Trash> fromJson(Map<String, dynamic> json) {
-    List<Trash> result = List.empty();
+    List<Trash> result = List.empty(growable:true);
     for (var el in json['result']) {
       log(el.toString());
       var a = el['id'];
