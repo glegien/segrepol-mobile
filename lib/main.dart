@@ -1,6 +1,9 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:appinio_swiper/appinio_swiper.dart';
+import 'package:segrepol/chat.dart';
 
 import 'init.dart';
 import 'dart:ui';
@@ -55,6 +58,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Swipe Demo',
+      initialRoute: '/',
+      routes: {
+        '/': (context) => const MyHomePage(title: 'AAAA',),
+        '/chat': (context) => ChatPage(),
+      },
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -67,7 +75,6 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }
@@ -91,22 +98,10 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
 
   @override
   void initState() {
     super.initState();
-  }
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
   }
 
   final Future _initFuture = Init.initialize();
@@ -160,6 +155,7 @@ class _MyHomePageState extends State<MyHomePage> {
               height: MediaQuery.of(context).size.height * 0.75,
               child: AppinioSwiper(
                 cards: cards,
+                  onSwipe: _swipe,
               ),
             ),
           ],
@@ -167,4 +163,15 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     );
   }
+
+  void _swipe(int index, AppinioSwiperDirection direction) {
+    log("the card was swiped to the: " + direction.name);
+    if(direction == AppinioSwiperDirection.right) {
+      // Open the chat
+      Navigator.pushNamed(context, '/chat');
+    } else {
+      // Nothing, just go to the next
+    }
+  }
+
 }
