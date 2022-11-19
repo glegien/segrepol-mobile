@@ -38,6 +38,9 @@ dependencies:
   cupertino_icons: ^1.0.2
   shared_preferences: ^2.0.15
   appinio_swiper: ^1.1.1
+
+  image_picker: ^0.8.6
+  flutter_storage_path: ^1.0.4
   flutter_chat_ui: ^1.6.6
   http: ^0.13.5
 
