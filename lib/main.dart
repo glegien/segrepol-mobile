@@ -164,6 +164,13 @@ class _MyHomePageState extends State<MyHomePage> {
           Uri.parse(
               'https://europe-central2-segrepol-b80d8.cloudfunctions.net/createChat'),
           body: map);
+      final snackBar = SnackBar(
+        content: const Text('Great! You can talk with the owner now...'),
+      );
+
+      // Find the ScaffoldMessenger in the widget tree
+      // and use it to show a SnackBar.
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
     } else {
       // Nothing, just go to the next
       log('INDEX:' + index.toString());
