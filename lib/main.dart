@@ -4,8 +4,6 @@ import 'dart:developer';
 import 'package:appinio_swiper/appinio_swiper.dart';
 import 'package:flutter/material.dart';
 
-import 'package:segrepol/chat.dart';
-
 import 'package:http/http.dart' as http;
 import 'package:segrepol/menu_overlay.dart';
 
@@ -28,7 +26,7 @@ class MyApp extends StatelessWidget {
         '/': (context) => const MyHomePage(
               title: 'SEGREPOL',
             ),
-        '/chat': (context) => new ChatPage(),
+        //'/chat': (context) => new ChatPage(),
       },
       theme: ThemeData(
         primarySwatch: Colors.blue,

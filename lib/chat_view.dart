@@ -50,9 +50,20 @@ class _MyChatView extends State<ChatView> {
                           width: 300,
                           height: 100,
                           child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
-                              Text(snapshot.data[index].itemName),
-                              Text(snapshot.data[index].chatId),
+                              Text(snapshot.data[index].itemName,
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontFamily: "Anton",
+                                    fontSize: 36,
+                                  )),
+                              Text(snapshot.data[index].itemDescription,
+                                  style: TextStyle(
+                                    color: Colors.black38,
+                                    fontFamily: "Anton",
+                                    fontSize: 20,
+                                  )),
                             ],
                           ))),
                 ),
