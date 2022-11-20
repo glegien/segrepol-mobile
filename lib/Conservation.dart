@@ -32,7 +32,12 @@ class _ConservationState extends State<Conservation> {
       // body: SafeArea(child: _list()),
       body: Stack(
         children: [
-          _list(),
+          IconButton(
+            iconSize: 50,
+              padding: EdgeInsets.only(top: 25),
+              onPressed: () => cofej(),
+              icon: Icon(Icons.arrow_back)),
+          Container(padding: EdgeInsets.only( top: 50),child: _list()),
           Align(
             alignment: Alignment.bottomLeft,
             child: Container(
@@ -99,7 +104,7 @@ class _ConservationState extends State<Conservation> {
             itemBuilder: (context, index) {
               return ListTile(
                 title: Container(
-                    height: 44,
+                  height: 44,
                   child: snapshot.data[index].senderId == Init.deviceId!
                       ? userCard(snapshot, index)
                       : enemyCard(snapshot, index),
@@ -113,7 +118,7 @@ class _ConservationState extends State<Conservation> {
 
   Widget userCard(AsyncSnapshot<dynamic> snapshot, int index) {
     return Container(
-      alignment: Alignment.topRight,
+      alignment: Alignment.centerRight,
       child: Card(
           color: Colors.green,
           child: Flex(
@@ -163,5 +168,9 @@ class _ConservationState extends State<Conservation> {
       setState(() {});
       titleController.clear();
     }
+  }
+
+  cofej() {
+    Navigator.of(context).pop();
   }
 }
