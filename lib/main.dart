@@ -168,6 +168,18 @@ class _MyHomePageState extends State<MyHomePage> {
       // Nothing, just go to the next
       log('INDEX:' + index.toString());
       log('LEN:' + trashList!.length.toString());
+      AnimatedOpacity(
+        // If the widget is visible, animate to 0.0 (invisible).
+        // If the widget is hidden, animate to 1.0 (fully visible).
+          opacity: 1.0,
+          duration: const Duration(milliseconds: 500),
+          // The green box must be a child of the AnimatedOpacity widget.
+          child: Container(
+            width: 100.0,
+            height: 100.0,
+            color: Colors.green,
+          )
+      );
     }
   }
 }

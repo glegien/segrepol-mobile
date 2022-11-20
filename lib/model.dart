@@ -39,12 +39,12 @@ class Trash {
                         fontSize: MediaQuery.of(context).size.height * 0.04,
                       ))),
               Padding(
-                  padding: EdgeInsets.all(15), //apply padding to all four sides
+                  padding: EdgeInsets.all(10), //apply padding to all four sides
                   child: Text(description,
                       style: TextStyle(
                         color: Colors.black54,
                         fontFamily: "Anton",
-                        fontSize: MediaQuery.of(context).size.height * 0.02,
+                        fontSize: MediaQuery.of(context).size.height * 0.015,
                       ))),
             ],
           ))
