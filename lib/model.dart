@@ -16,7 +16,6 @@ class Trash {
   Card buildCard(BuildContext context) {
     return Card(
       child: Column(
-        //mainAxisSize: MainAxisSize.max,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
@@ -24,33 +23,29 @@ class Trash {
             child: Image(
               image: Image.memory(base64Decode(imageStr)).image,
             ),
-            height: MediaQuery.of(context).size.height * 0.35,
+            height: MediaQuery.of(context).size.height * 0.40,
           ),
           SizedBox(height: MediaQuery.of(context).size.height * 0.03),
           SizedBox(
-              //width: MediaQuery.of(context).size.width * 0.9,
-              //height: MediaQuery.of(context).size.height * 0.25,
               child: Column(
-            //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Padding(
-                padding: EdgeInsets.all(15), //apply padding to all four sides
-                child:
-              Text(name,
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontFamily: "Anton",
-                    fontSize: MediaQuery.of(context).size.height * 0.04,
-                  ))),
-    Padding(
-    padding: EdgeInsets.all(15), //apply padding to all four sides
-    child: Text(description,
-                  style: TextStyle(
-                    color: Colors.black54,
-                    fontFamily: "Anton",
-                    fontSize: MediaQuery.of(context).size.height * 0.03,
-                  ))),
+                  padding: EdgeInsets.all(15), //apply padding to all four sides
+                  child: Text(name,
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontFamily: "Anton",
+                        fontSize: MediaQuery.of(context).size.height * 0.04,
+                      ))),
+              Padding(
+                  padding: EdgeInsets.all(15), //apply padding to all four sides
+                  child: Text(description,
+                      style: TextStyle(
+                        color: Colors.black54,
+                        fontFamily: "Anton",
+                        fontSize: MediaQuery.of(context).size.height * 0.03,
+                      ))),
             ],
           ))
         ],
