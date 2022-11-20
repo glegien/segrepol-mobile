@@ -30,7 +30,7 @@ class _MyDescriptionAdapter extends State<AddDescription> {
           child: Column(
             children: [
               Padding(
-                  padding: EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.fromLTRB(8.0, 100, 8.0, 0),
                   child: Row(
                     children: [
                       Expanded(
@@ -45,18 +45,25 @@ class _MyDescriptionAdapter extends State<AddDescription> {
                       Expanded(
                         child: Column(
                           children: [
-                            SizedBox(
-                              height: 200,
+                            Padding(
+                              padding: const EdgeInsets.only(right: 15.0),
                               child: TextField(
                                   controller: titleController,
-                                  decoration:
-                                      InputDecoration(labelText: "Add Title")),
+                                  decoration: const InputDecoration(
+                                      label: Text(
+                                    "Add Title",
+                                    style: TextStyle(
+                                        fontSize: 30, fontFamily: 'Avenir'),
+                                  ))),
                             ),
                             Padding(
-                              padding: EdgeInsets.all(8.0),
+                              padding: const EdgeInsets.only(right: 15.0),
                               child: TextField(
+
+                                keyboardType: TextInputType.multiline,
+                                  maxLines: 5,
                                   controller: descriptionController,
-                                  decoration: InputDecoration(
+                                  decoration: const InputDecoration(
                                       labelText: "Description")),
                             ),
                           ],
@@ -94,7 +101,7 @@ class _MyDescriptionAdapter extends State<AddDescription> {
         }));
     log("obrazek has been added: ${response.statusCode}");
     Navigator.of(context).push(MaterialPageRoute(
-      builder: (context) => MyHomePage(title: "title"),
+      builder: (context) => const MyHomePage(title: "title"),
     ));
   }
 
