@@ -24,7 +24,7 @@ class Trash {
             child: Image(
               image: Image.memory(base64Decode(imageStr)).image,
             ),
-            height: MediaQuery.of(context).size.height * 0.30,
+            height: MediaQuery.of(context).size.height * 0.35,
           ),
           SizedBox(height: MediaQuery.of(context).size.height * 0.03),
           SizedBox(
@@ -34,18 +34,23 @@ class Trash {
             //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
+              Padding(
+                padding: EdgeInsets.all(15), //apply padding to all four sides
+                child:
               Text(name,
                   style: TextStyle(
                     color: Colors.black,
                     fontFamily: "Anton",
                     fontSize: MediaQuery.of(context).size.height * 0.04,
-                  )),
-              Text(description,
+                  ))),
+    Padding(
+    padding: EdgeInsets.all(15), //apply padding to all four sides
+    child: Text(description,
                   style: TextStyle(
                     color: Colors.black54,
                     fontFamily: "Anton",
                     fontSize: MediaQuery.of(context).size.height * 0.03,
-                  )),
+                  ))),
             ],
           ))
         ],
