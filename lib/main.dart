@@ -84,13 +84,30 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   static fetchTrashes() async {
+    await Init.initialize();
+    log('https://europe-central2-segrepol-b80d8.cloudfunctions.net/getOthersItems?userId='+Init.deviceId!);
     final response = await http.get(Uri.parse(
-        'https://europe-central2-segrepol-b80d8.cloudfunctions.net/getOthersItems?userId=dupa'));
+        'https://europe-central2-segrepol-b80d8.cloudfunctions.net/getOthersItems?userId='+Init.deviceId!));
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
       // then parse the JSON.
       Map<String, dynamic> json = jsonDecode(response.body);
       trashList = Trash.fromJson(json);
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception('Failed to load TRASHES!!!');
+    }
+  }
+
+  static fetchMoreTrashes() async {
+    final response = await http.get(Uri.parse(
+        'https://europe-central2-segrepol-b80d8.cloudfunctions.net/getOthersItems?userId='+Init.deviceId!));
+    if (response.statusCode == 200) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON.
+      Map<String, dynamic> json = jsonDecode(response.body);
+      trashList!.addAll(Trash.fromJson(json));
     } else {
       // If the server did not return a 200 OK response,
       // then throw an exception.
@@ -182,6 +199,11 @@ class _MyHomePageState extends State<MyHomePage> {
       Navigator.pushNamed(context, '/chat');
     } else {
       // Nothing, just go to the next
+      log('INDEX:'+index.toString());
+      log('LEN:'+trashList!.length.toString());
+      if(index == 1) {
+        fetchMoreTrashes;
+      }
     }
   }
 }

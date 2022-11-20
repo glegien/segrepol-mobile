@@ -17,9 +17,7 @@ class Trash {
     return Card(
       child: Column(
         children: [
-          //Image(image: Image.memory(base64Decode(imageStr)).image),
-      Image(image:NetworkImage(
-              'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg')),
+          Image(image: Image.memory(base64Decode(imageStr)).image),
           SizedBox(
               //width: screenSize.width / 1.2,
               //height: screenSize.height / 1.7 - screenSize.height / 2.2,
