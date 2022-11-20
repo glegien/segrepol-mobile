@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
         '/': (context) => const MyHomePage(
               title: 'Hubka',
             ),
-        '/chat': (context) => ChatPage(),
+        //'/chat': (context) => ChatPage(),
       },
       theme: ThemeData(
         // This is the theme of your application.
@@ -201,7 +201,14 @@ class _MyHomePageState extends State<MyHomePage> {
     log("the card was swiped to the: " + direction.name);
     if (direction == AppinioSwiperDirection.right) {
       // Open the chat
-      Navigator.pushNamed(context, '/chat');
+      Map<String, String> map = {
+        'itemId': trashList![index].id,
+        'buyerId': Init.deviceId!
+      };
+      http.post(
+          Uri.parse(
+              'https://europe-central2-segrepol-b80d8.cloudfunctions.net/createChat'),
+          body: map);
     } else {
       // Nothing, just go to the next
       log('INDEX:' + index.toString());
