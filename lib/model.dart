@@ -44,7 +44,7 @@ class Trash {
                       style: TextStyle(
                         color: Colors.black54,
                         fontFamily: "Anton",
-                        fontSize: MediaQuery.of(context).size.height * 0.03,
+                        fontSize: MediaQuery.of(context).size.height * 0.02,
                       ))),
             ],
           ))
