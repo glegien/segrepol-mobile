@@ -104,49 +104,55 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      floatingActionButton: OverlayMenu(),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-            SizedBox(
-                height: MediaQuery.of(context).size.height * 0.08,
-                child: Row(
-                  children: [
-                    SizedBox(width: MediaQuery.of(context).size.width * 0.05),
-                    Text(
-                      "SEGREPOL",
-                      style: TextStyle(
-                          color: Colors.grey,
-                          fontFamily: "Anton",
-                          fontSize: MediaQuery.of(context).size.height * 0.07,
-                          shadows: const [
-                            Shadow(color: Colors.black, blurRadius: 4)
-                          ]),
-                    )
-                  ],
-                ) // lower menu
-                ),
-            SizedBox(
-                height: MediaQuery.of(context).size.height * 0.72,
-                child: FutureBuilder(
-                    future: _fetchTrashes,
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.done) {
-                        return AppinioSwiper(
-                          cards: buildCards(context),
-                          onSwipe: _swipe,
-                          onEnd: () => setState(() {
-                            fetchMoreTrashes();
-                          }),
-                        );
-                      } else {
-                        return const Text("LOADING...");
-                      }
-                    })),
-          ],
+    return Container(
+      decoration: BoxDecoration(
+          image: DecorationImage(
+              image: AssetImage("images/background.png"), fit: BoxFit.cover)),
+      child: Scaffold(
+        floatingActionButton: OverlayMenu(),
+        backgroundColor: Colors.transparent,
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+              SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.08,
+                  child: Row(
+                    children: [
+                      SizedBox(width: MediaQuery.of(context).size.width * 0.05),
+                      Text(
+                        "SEGREPOL",
+                        style: TextStyle(
+                            color: Colors.grey,
+                            fontFamily: "Anton",
+                            fontSize: MediaQuery.of(context).size.height * 0.07,
+                            shadows: const [
+                              Shadow(color: Colors.black, blurRadius: 4)
+                            ]),
+                      )
+                    ],
+                  ) // lower menu
+                  ),
+              SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.72,
+                  child: FutureBuilder(
+                      future: _fetchTrashes,
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.done) {
+                          return AppinioSwiper(
+                            cards: buildCards(context),
+                            onSwipe: _swipe,
+                            onEnd: () => setState(() {
+                              fetchMoreTrashes();
+                            }),
+                          );
+                        } else {
+                          return const Text("LOADING...");
+                        }
+                      })),
+            ],
+          ),
         ),
       ),
     );
@@ -176,8 +182,8 @@ class _MyHomePageState extends State<MyHomePage> {
       log('INDEX:' + index.toString());
       log('LEN:' + trashList!.length.toString());
       AnimatedOpacity(
-        // If the widget is visible, animate to 0.0 (invisible).
-        // If the widget is hidden, animate to 1.0 (fully visible).
+          // If the widget is visible, animate to 0.0 (invisible).
+          // If the widget is hidden, animate to 1.0 (fully visible).
           opacity: 1.0,
           duration: const Duration(milliseconds: 500),
           // The green box must be a child of the AnimatedOpacity widget.
@@ -185,8 +191,7 @@ class _MyHomePageState extends State<MyHomePage> {
             width: 100.0,
             height: 100.0,
             color: Colors.green,
-          )
-      );
+          ));
     }
   }
 }

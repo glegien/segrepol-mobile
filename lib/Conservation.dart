@@ -27,7 +27,7 @@ class _ConservationState extends State<Conservation> {
 
   @override
   Widget build(BuildContext context) {
-    // _timer = Timer.periodic(Duration(seconds: 5), (Timer t) => setState(() {}));
+    _timer = Timer.periodic(Duration(seconds: 5), (Timer t) => setState(() {}));
     return Scaffold(
       // body: SafeArea(child: _list()),
       body: Stack(
