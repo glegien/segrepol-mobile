@@ -112,6 +112,7 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
+            SizedBox(height: MediaQuery.of(context).size.height * 0.05),
             SizedBox(
                 height: MediaQuery.of(context).size.height * 0.08,
                 child: Row(
@@ -131,7 +132,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 ) // lower menu
                 ),
             SizedBox(
-                height: MediaQuery.of(context).size.height * 0.75,
+                height: MediaQuery.of(context).size.height * 0.72,
                 child: FutureBuilder(
                     future: _fetchTrashes,
                     builder: (context, snapshot) {

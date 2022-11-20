@@ -17,6 +17,7 @@ class Trash {
     return Card(
       child: Column(
         //mainAxisSize: MainAxisSize.max,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           SizedBox(
@@ -25,6 +26,7 @@ class Trash {
             ),
             height: MediaQuery.of(context).size.height * 0.30,
           ),
+          SizedBox(height: MediaQuery.of(context).size.height * 0.03),
           SizedBox(
               //width: MediaQuery.of(context).size.width * 0.9,
               //height: MediaQuery.of(context).size.height * 0.25,
