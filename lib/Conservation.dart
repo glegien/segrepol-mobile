@@ -20,7 +20,7 @@ class _ConservationState extends State<Conservation> {
 
   @override
   Widget build(BuildContext context) {
-    Timer.periodic(Duration(seconds: 5), (Timer t) => setState((){}));
+    // Timer.periodic(Duration(seconds: 5), (Timer t) => setState((){}));
     return Scaffold(
       // body: SafeArea(child: _list()),
       body: Stack(
@@ -91,19 +91,31 @@ class _ConservationState extends State<Conservation> {
             itemCount: snapshot.data != null ? snapshot.data.length : 0,
             itemBuilder: (context, index) {
               return ListTile(
-                title: Card(
-                  child: InkWell(
-                      splashColor: Colors.green,
-                      child: SizedBox(
-                          width: 300,
-                          height: 100,
-                          child: Text(snapshot.data[index].message))),
+                title: Container(
+                  height: 50,
+                  child: snapshot.data[index].senderId == Init.deviceId!
+                      ? userCard(snapshot, index)
+                      : enemyCard(snapshot, index),
                 ),
               );
             });
       },
       future: _loadEmojiAsList(),
     );
+  }
+
+  Card userCard(AsyncSnapshot<dynamic> snapshot, int index) {
+    return Card(
+        color: Colors.green,
+        child: Text(
+          snapshot.data[index].message, style: TextStyle(fontSize: 22),));
+  }
+
+  Card enemyCard(AsyncSnapshot<dynamic> snapshot, int index) {
+    return Card(
+        color: Colors.red,
+        child: Text(
+          snapshot.data[index].message, style: TextStyle(fontSize: 22),));
   }
 
   sendMessage() async {
