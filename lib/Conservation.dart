@@ -17,10 +17,17 @@ class Conservation extends StatefulWidget {
 
 class _ConservationState extends State<Conservation> {
   final titleController = TextEditingController();
+  late Timer _timer;
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    // Timer.periodic(Duration(seconds: 5), (Timer t) => setState((){}));
+    // _timer = Timer.periodic(Duration(seconds: 5), (Timer t) => setState(() {}));
     return Scaffold(
       // body: SafeArea(child: _list()),
       body: Stack(
@@ -92,7 +99,7 @@ class _ConservationState extends State<Conservation> {
             itemBuilder: (context, index) {
               return ListTile(
                 title: Container(
-                  height: 50,
+                    height: 44,
                   child: snapshot.data[index].senderId == Init.deviceId!
                       ? userCard(snapshot, index)
                       : enemyCard(snapshot, index),
@@ -104,18 +111,40 @@ class _ConservationState extends State<Conservation> {
     );
   }
 
-  Card userCard(AsyncSnapshot<dynamic> snapshot, int index) {
-    return Card(
-        color: Colors.green,
-        child: Text(
-          snapshot.data[index].message, style: TextStyle(fontSize: 22),));
+  Widget userCard(AsyncSnapshot<dynamic> snapshot, int index) {
+    return Container(
+      alignment: Alignment.topRight,
+      child: Card(
+          color: Colors.green,
+          child: Flex(
+            direction: Axis.vertical,
+            children: [
+              Flexible(
+                child: Text(
+                  snapshot.data[index].message,
+                  style: TextStyle(fontSize: 22),
+                ),
+              ),
+            ],
+            // padding: const EdgeInsets.all(8.0),
+            // child:
+          )),
+    );
   }
 
-  Card enemyCard(AsyncSnapshot<dynamic> snapshot, int index) {
-    return Card(
-        color: Colors.red,
-        child: Text(
-          snapshot.data[index].message, style: TextStyle(fontSize: 22),));
+  Widget enemyCard(AsyncSnapshot<dynamic> snapshot, int index) {
+    return Container(
+      alignment: Alignment.topLeft,
+      child: Card(
+          color: Colors.red,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              snapshot.data[index].message,
+              style: TextStyle(fontSize: 22),
+            ),
+          )),
+    );
   }
 
   sendMessage() async {
@@ -132,6 +161,7 @@ class _ConservationState extends State<Conservation> {
         }));
     if (response.statusCode == 200) {
       setState(() {});
+      titleController.clear();
     }
   }
 }
