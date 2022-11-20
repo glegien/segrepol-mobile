@@ -17,32 +17,32 @@ class Trash {
     return Card(
       child: Column(
         //mainAxisSize: MainAxisSize.max,
-        //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           SizedBox(
             child: Image(
               image: Image.memory(base64Decode(imageStr)).image,
             ),
-            height: MediaQuery.of(context).size.height * 0.50,
+            height: MediaQuery.of(context).size.height * 0.30,
           ),
           SizedBox(
               //width: MediaQuery.of(context).size.width * 0.9,
               //height: MediaQuery.of(context).size.height * 0.25,
               child: Column(
             //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            //crossAxisAlignment: CrossAxisAlignment.stretch,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Text(name,
                   style: TextStyle(
                     color: Colors.black,
                     fontFamily: "Anton",
-                    //fontSize: MediaQuery.of(context).size.height * 0.04,
+                    fontSize: MediaQuery.of(context).size.height * 0.04,
                   )),
               Text(description,
                   style: TextStyle(
                     color: Colors.black54,
                     fontFamily: "Anton",
-                    // fontSize: MediaQuery.of(context).size.height * 0.03,
+                    fontSize: MediaQuery.of(context).size.height * 0.03,
                   )),
             ],
           ))
