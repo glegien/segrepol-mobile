@@ -85,9 +85,11 @@ class _MyHomePageState extends State<MyHomePage> {
 
   static fetchTrashes() async {
     await Init.initialize();
-    log('https://europe-central2-segrepol-b80d8.cloudfunctions.net/getOthersItems?userId='+Init.deviceId!);
+    log('https://europe-central2-segrepol-b80d8.cloudfunctions.net/getOthersItems?userId=' +
+        Init.deviceId!);
     final response = await http.get(Uri.parse(
-        'https://europe-central2-segrepol-b80d8.cloudfunctions.net/getOthersItems?userId='+Init.deviceId!));
+        'https://europe-central2-segrepol-b80d8.cloudfunctions.net/getOthersItems?userId=' +
+            Init.deviceId!));
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
       // then parse the JSON.
@@ -102,12 +104,13 @@ class _MyHomePageState extends State<MyHomePage> {
 
   static fetchMoreTrashes() async {
     final response = await http.get(Uri.parse(
-        'https://europe-central2-segrepol-b80d8.cloudfunctions.net/getOthersItems?userId='+Init.deviceId!));
+        'https://europe-central2-segrepol-b80d8.cloudfunctions.net/getOthersItems?userId=' +
+            Init.deviceId!));
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
       // then parse the JSON.
       Map<String, dynamic> json = jsonDecode(response.body);
-      trashList!.addAll(Trash.fromJson(json));
+      trashList!.insertAll(0, Trash.fromJson(json));
     } else {
       // If the server did not return a 200 OK response,
       // then throw an exception.
@@ -178,12 +181,14 @@ class _MyHomePageState extends State<MyHomePage> {
                         return AppinioSwiper(
                           cards: buildCards(),
                           onSwipe: _swipe,
+                          onEnd: () => setState(() {
+                            fetchMoreTrashes();
+                          }),
                         );
                       } else {
                         return const Text("LOADING...");
                       }
-                    })
-                ),
+                    })),
             SizedBox(child: Row() // lower menu
                 )
           ],
@@ -199,11 +204,8 @@ class _MyHomePageState extends State<MyHomePage> {
       Navigator.pushNamed(context, '/chat');
     } else {
       // Nothing, just go to the next
-      log('INDEX:'+index.toString());
-      log('LEN:'+trashList!.length.toString());
-      if(index == 1) {
-        fetchMoreTrashes;
-      }
+      log('INDEX:' + index.toString());
+      log('LEN:' + trashList!.length.toString());
     }
   }
 }
