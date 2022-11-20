@@ -2,31 +2,32 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:segrepol/Conservation.dart';
-import 'package:segrepol/init.dart';
-import 'package:segrepol/menu_overlay.dart';
-import 'package:segrepol/model/ChatModel.dart';
+import 'package:segrepol/model/ConservationModel.dart';
 
-class ChatView extends StatefulWidget {
+class Conservation extends StatefulWidget {
+  String chatId;
+
+  Conservation(this.chatId, {super.key});
+
   @override
-  State<ChatView> createState() => _MyChatView();
+  State<Conservation> createState() => _ConservationState();
 }
 
-class _MyChatView extends State<ChatView> {
+class _ConservationState extends State<Conservation> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: OverlayMenu(),
       body: _list(),
     );
   }
 
-  Future<List<ChatModel>> _loadEmojiAsList() async {
+  Future<List<ConservationModel>> _loadEmojiAsList() async {
     final response = await http.get(Uri.parse(
-        'https://europe-central2-segrepol-b80d8.cloudfunctions.net/getChats?userId=' +
-            Init.deviceId!));
+        'https://europe-central2-segrepol-b80d8.cloudfunctions.net/getMessages?chatId=' +
+            widget.chatId));
+    debugPrint("response message " + response.body);
     Map<String, dynamic> json = jsonDecode(response.body);
-    return ChatModel.fromJson(json);
+    return ConservationModel.fromJson(json);
   }
 
   Widget _list() {
@@ -45,27 +46,15 @@ class _MyChatView extends State<ChatView> {
                 title: Card(
                   child: InkWell(
                       splashColor: Colors.green,
-                      onTap: () => openChat(snapshot.data[index].chatId),
                       child: SizedBox(
                           width: 300,
                           height: 100,
-                          child: Column(
-                            children: [
-                              Text(snapshot.data[index].itemName),
-                              Text(snapshot.data[index].chatId),
-                            ],
-                          ))),
+                          child: Text(snapshot.data[index].message))),
                 ),
               );
             });
       },
       future: _loadEmojiAsList(),
     );
-  }
-
-  openChat(String chatId) {
-    Navigator.of(context).push(MaterialPageRoute(
-      builder: (context) => Conservation(chatId),
-    ));
   }
 }
